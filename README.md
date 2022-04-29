@@ -8,7 +8,7 @@ additional library of your choice (bitcoin-utils is highly recommended though).
 The first one will create a `P2SH` Bitcoin address that implements a `MULTISIG` scheme,
 where all funds sent to it should be locked until 2 out of 3 potential signers sign a
 transaction to move the funds elsewhere.
-The second program will allow spending all funds from this P2SH address.
+The second program will allow spending all funds from this `P2SH` address.
 Both programs should:
 * use regtest/testnet
 * assume a local Bitcoin regtest/testnet node is running
