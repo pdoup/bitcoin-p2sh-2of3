@@ -38,7 +38,7 @@ provided private keys)
 - [ ] verify that the transaction is valid and will be accepted by the Bitcoin nodes
 - [ ] if the transaction is valid, send it to the blockchain
 
-***Notes***
+### ***Notes***
 1. there is some repetition between the 2 programs; this is fine[^1].
 2. you may test your scripts by sending some funds to the P2SH address you created
 3. you may query the local Bitcoin testnet/regtest node using the JSON-RPC interface
