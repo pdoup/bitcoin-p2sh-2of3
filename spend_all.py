@@ -151,6 +151,7 @@ def main():
     tx = Transaction(inputs=p2sh_utxo, outputs=[txout])
 
     unsigned_raw_tx = tx.serialize()
+    # display the unsigned transaction
     print("=" * 60)
     print('\nRaw unsigned transaction: %s\n' % unsigned_raw_tx)
     print("=" * 60)
