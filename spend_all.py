@@ -18,7 +18,7 @@ class InvalidTransactionError(Exception):
 
 class FeeRate(Enum):
     '''
-    testnet fee rates (as of 30/4/22) from : https://live.blockcypher.com/btc-testnet/ 
+    Testnet fee rates (as of 30/4/22) from : https://live.blockcypher.com/btc-testnet/ 
     each value is the BTC amount per KB        
     '''
     HIGH = 0.00171   # high priority (1-2 blocks)
