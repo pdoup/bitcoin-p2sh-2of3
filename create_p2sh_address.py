@@ -4,9 +4,13 @@ from bitcoinutils.setup import setup
 from bitcoinutils.keys import P2shAddress, PublicKey
 from bitcoinutils.script import Script
 
-# Pub Key 1: 03f69a95e6425186fe303b5e2d9cb22dd74747d053babc237f1505e6214d398217
-# Pub Key 2: 0324507ce2fcdb044cab092c044c63cefa4dff46aa189322f47a923de8f2e8144c
-# Pub Key 3: 02d21464d7339e58526680f8c7c20fd6946f72fd4717c82214b6d9ea9422d08287
+'''
+Mock public keys for testing
+----------------------------
+Pub Key 1: 03f69a95e6425186fe303b5e2d9cb22dd74747d053babc237f1505e6214d398217
+Pub Key 2: 0324507ce2fcdb044cab092c044c63cefa4dff46aa189322f47a923de8f2e8144c
+Pub Key 3: 02d21464d7339e58526680f8c7c20fd6946f72fd4717c82214b6d9ea9422d08287
+'''
 
 def main():
     setup('regtest')
