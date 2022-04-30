@@ -53,6 +53,7 @@ def main():
     parser.add_argument('--log-level', type=str, metavar='log_level', nargs='?',
                         default='INFO', choices=('DEBUG', 'INFO', 'WARN', 'ERROR'),
                         required=False, help='Sets the log level {}'.format({'DEBUG', 'INFO', 'WARN', 'ERROR'}), dest='log_level')
+    
     args = parser.parse_args()
 
     logger.setLevel(args.log_level)
