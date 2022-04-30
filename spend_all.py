@@ -29,8 +29,8 @@ class FeeRate(Enum):
 def main():
     setup('regtest')
 
-    logging.basicConfig(format='[%(levelname)s] %(asctime)s : %(message)s',
-                        datefmt='%d/%m/%Y %H:%M:%S', level=logging.INFO)
+    logging.basicConfig(
+        format='[%(levelname)s] %(asctime)s : %(message)s', datefmt='%d/%m/%Y %H:%M:%S')
     logger = logging.getLogger()
 
     parser = argparse.ArgumentParser(description='Spend all funds from a 2-of-3 P2SH address to P2PKH address',
@@ -46,14 +46,18 @@ def main():
                         required=True, help='Valid P2PKH address to send the funds to')
     parser.add_argument('-p2sh_address', type=str, metavar='P2SH_Address',
                         required=True, help='Valid P2SH address')
-
     parser.add_argument('-rpcuser', type=str, metavar='RPC_username',
                         required=True, help='RPC username as defined in the .conf file')
     parser.add_argument('-rpcpass', type=str, metavar='RPC_password',
                         required=True, help='RPC password as defined in the .conf file')
-
+    parser.add_argument('--log-level', type=str, metavar='log_level', nargs='?',
+                        default='INFO', choices=('DEBUG', 'INFO', 'WARN', 'ERROR'),
+                        required=False, help='Sets the log level', dest='log_level')
     args = parser.parse_args()
 
+    logger.setLevel(args.log_level)
+
+    # initialize proxy - we'll be needing this to query our local bitcoin node
     proxy = NodeProxy(args.rpcuser, args.rpcpass).get_proxy()
 
     # accept 2 private keys
@@ -151,7 +155,6 @@ def main():
     tx = Transaction(inputs=p2sh_utxo, outputs=[txout])
 
     unsigned_raw_tx = tx.serialize()
-    # display the unsigned transaction
     print("=" * 60)
     print('\nRaw unsigned transaction: %s\n' % unsigned_raw_tx)
     print("=" * 60)
