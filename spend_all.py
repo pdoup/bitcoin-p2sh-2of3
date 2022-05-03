@@ -92,12 +92,14 @@ def main():
     
     # now we can retrieve the total number of transactions in the blockchain
     total_txs = sum([proxy.getblockstats(block, ['txs'])['txs']
-                    for block in range(1, n_blocks)]) + n_mempool
+                    for block in range(1, n_blocks)])
     logger.info(
-        'Found a total of {} transactions in the blockchain'.format(total_txs))
-
+        'Found {} transactions in the blockchain'.format(total_txs))
+    
+    logger.info('Found %ld transactions in the mempool', n_mempool)
+    
     # list all transactions in the blockchain
-    all_txs = proxy.listtransactions('*', total_txs, 0, True)
+    all_txs = proxy.listtransactions('*', total_txs + n_mempool, 0, True)
 
     # filter all of the txs above to keep just the ones that involve the P2SH address
     p2sh_txs = [*filter(lambda tx: tx['address'] ==
