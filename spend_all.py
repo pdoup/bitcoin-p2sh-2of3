@@ -1,5 +1,5 @@
 #########################################################
-'''                                  
+"""                                  
 Author: Panagiotis Doupidis
 A.M.: 89
 
@@ -10,7 +10,7 @@ A.M.: 89
             Assignment 1, 2022 - Bitcoin
 
 spend_all.py : Spend all funds from this P2SH address.
-'''
+"""
 #########################################################
 import argparse
 import logging
@@ -31,46 +31,93 @@ class InvalidTransactionError(Exception):
 
 
 class FeeRate(Enum):
-    '''
-    Testnet fee rates (as of 03/05/22) from : https://live.blockcypher.com/btc-testnet/ 
-    each value is the BTC amount per KB        
-    '''
-    HIGH = 0.00078   # high priority (1-2 blocks)
+    """
+    Testnet fee rates (as of 03/05/22) from : https://live.blockcypher.com/btc-testnet/
+    each value is the BTC amount per KB
+    """
+
+    HIGH = 0.00078  # high priority (1-2 blocks)
     MEDIUM = 0.00052  # medium priority (3-6 blocks)
-    LOW = 0.00029    # low priority (7+ blocks)
+    LOW = 0.00029  # low priority (7+ blocks)
 
 
 def main():
-    setup('regtest')
+    setup("regtest")
 
     logging.basicConfig(
-        format='[%(levelname)s] %(asctime)s : %(message)s', datefmt='%d/%m/%Y %H:%M:%S')
+        format="[%(levelname)s] %(asctime)s : %(message)s", datefmt="%d/%m/%Y %H:%M:%S"
+    )
     logger = logging.getLogger()
 
-    parser = argparse.ArgumentParser(description='Spend all funds from a 2-of-3 P2SH address to P2PKH address',
-                                     formatter_class=lambda prog: argparse.HelpFormatter(prog, max_help_position=35))
+    parser = argparse.ArgumentParser(
+        description="Spend all funds from a 2-of-3 P2SH address to P2PKH address",
+        formatter_class=lambda prog: argparse.HelpFormatter(prog, max_help_position=35),
+    )
 
-    parser.add_argument('-sk1', type=str, metavar='Private_Key_#1',
-                        required=True, help='First private key')
-    parser.add_argument('-sk2', type=str, metavar='Private_Key_#2',
-                        required=True, help='Second private key')
-    parser.add_argument('-pk', type=str, metavar='Public_Key',
-                        required=True, help='Public key')
-    parser.add_argument('-p2pkh_address', type=str, metavar='P2PKH_Address',
-                        required=True, help='Valid P2PKH address to send the funds to')
-    parser.add_argument('-p2sh_address', type=str, metavar='P2SH_Address',
-                        required=True, help='Valid P2SH address')
-    parser.add_argument('-rpcuser', type=str, metavar='RPC_username',
-                        required=True, help='RPC username as defined in the .conf file')
-    parser.add_argument('-rpcpass', type=str, metavar='RPC_password',
-                        required=True, help='RPC password as defined in the .conf file')
-    parser.add_argument('--log-level', type=str, metavar='log_level', nargs='?',
-                        default='INFO', choices=('DEBUG', 'INFO', 'WARN', 'ERROR'),
-                        required=False, help='Sets the log level {}'.format({'DEBUG', 'INFO', 'WARN', 'ERROR'}), 
-                        dest='log_level')
-    parser.add_argument('--dry-run', action="store_true", required=False, dest="dry_run",
-                        help='Displays the signed raw transaction but doesn\'t actually send it')
-        
+    parser.add_argument(
+        "-sk1",
+        type=str,
+        metavar="Private_Key_#1",
+        required=True,
+        help="First private key",
+    )
+    parser.add_argument(
+        "-sk2",
+        type=str,
+        metavar="Private_Key_#2",
+        required=True,
+        help="Second private key",
+    )
+    parser.add_argument(
+        "-pk", type=str, metavar="Public_Key", required=True, help="Public key"
+    )
+    parser.add_argument(
+        "-p2pkh_address",
+        type=str,
+        metavar="P2PKH_Address",
+        required=True,
+        help="Valid P2PKH address to send the funds to",
+    )
+    parser.add_argument(
+        "-p2sh_address",
+        type=str,
+        metavar="P2SH_Address",
+        required=True,
+        help="Valid P2SH address",
+    )
+    parser.add_argument(
+        "-rpcuser",
+        type=str,
+        metavar="RPC_username",
+        required=True,
+        help="RPC username as defined in the .conf file",
+    )
+    parser.add_argument(
+        "-rpcpass",
+        type=str,
+        metavar="RPC_password",
+        required=True,
+        help="RPC password as defined in the .conf file",
+    )
+    parser.add_argument(
+        "--log-level",
+        type=str,
+        metavar="log_level",
+        nargs="?",
+        default="INFO",
+        choices=("DEBUG", "INFO", "WARN", "ERROR"),
+        required=False,
+        help="Sets the log level {}".format({"DEBUG", "INFO", "WARN", "ERROR"}),
+        dest="log_level",
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        required=False,
+        dest="dry_run",
+        help="Displays the signed raw transaction but doesn't actually send it",
+    )
+
     args = parser.parse_args()
 
     logger.setLevel(args.log_level)
@@ -86,8 +133,16 @@ def main():
     pk = PublicKey(args.pk)
 
     # recrate the redeem script
-    redeem_script = Script(['OP_2', sk1.get_public_key().to_hex(), sk2.get_public_key().to_hex(),
-                            pk.to_hex(), 'OP_3', 'OP_CHECKMULTISIG'])
+    redeem_script = Script(
+        [
+            "OP_2",
+            sk1.get_public_key().to_hex(),
+            sk2.get_public_key().to_hex(),
+            pk.to_hex(),
+            "OP_3",
+            "OP_CHECKMULTISIG",
+        ]
+    )
 
     # accept p2sh address
     p2sh_addr = P2shAddress(args.p2sh_address)
@@ -95,59 +150,62 @@ def main():
     # check if there is a mismatch between the P2SH address provided and the one we can recreate based on the user's input
     if p2sh_addr.to_string() != P2shAddress.from_script(redeem_script).to_string():
         raise ValueError(
-            'P2SH address provided cannot be derived from the public keys provided')
+            "P2SH address provided cannot be derived from the public keys provided"
+        )
 
     # accept a p2pkh address to send funds to
     p2pkh_addr = P2pkhAddress(args.p2pkh_address)
 
     # determine the total amount of blocks in the chain
     n_blocks = proxy.getblockcount()
-    
+
     # also probe the mempool to check for any txs not in blocks yet
-    n_mempool = proxy.getmempoolinfo()['size']
-    
+    n_mempool = proxy.getmempoolinfo()["size"]
+
     # now we can retrieve the total number of transactions in the blockchain + mempool
-    total_txs = sum([proxy.getblockstats(block, ['txs'])['txs']
-                    for block in range(1, n_blocks)])
-    logger.info(
-        'Found {} transactions in the blockchain'.format(total_txs))
-    
-    logger.info('Found %ld transactions in the mempool', n_mempool)
-    
+    total_txs = sum(
+        [proxy.getblockstats(block, ["txs"])["txs"] for block in range(1, n_blocks)]
+    )
+    logger.info("Found {} transactions in the blockchain".format(total_txs))
+
+    logger.info("Found %ld transactions in the mempool", n_mempool)
+
     # list all transactions in the blockchain
-    all_txs = proxy.listtransactions('*', total_txs + n_mempool, 0, True)
+    all_txs = proxy.listtransactions("*", total_txs + n_mempool, 0, True)
 
     # filter all of the txs above to keep just the ones that involve the P2SH address
-    p2sh_txs = [*filter(lambda tx: tx['address'] ==
-                        p2sh_addr.to_string(), all_txs)]
+    p2sh_txs = [*filter(lambda tx: tx["address"] == p2sh_addr.to_string(), all_txs)]
 
     logger.info(
-        '{} transactions concerning the given P2SH address'.format(len(p2sh_txs)))
+        "{} transactions concerning the given P2SH address".format(len(p2sh_txs))
+    )
 
     p2sh_utxo = []
-    amount_to_send = 0.
+    amount_to_send = 0.0
 
-    '''
+    """
     Iterate over all p2sh_txs and add them as inputs to the tx we'll construct later.
     Also make sure that these txs are incoming to that address and have at least MIN_CONF confirmations.
     For the sake of this assignment we'll accept them even if they have 0 confirmations (at least in mempool).
-    '''
+    """
     for tx in p2sh_txs:
         # sanity check to make sure that the tx is not already spent
-        if not proxy.gettxout(tx['txid'], tx['vout']):
-            logger.warning('tx [{}] already spent'.format(tx['txid']))
+        if not proxy.gettxout(tx["txid"], tx["vout"]):
+            logger.warning("tx [{}] already spent".format(tx["txid"]))
             continue
-        if int(tx['confirmations']) >= MIN_CONF and tx['category'] == 'send':
-            tx_in = TxInput(tx['txid'], tx['vout'])
+        if int(tx["confirmations"]) >= MIN_CONF and tx["category"] == "send":
+            tx_in = TxInput(tx["txid"], tx["vout"])
             logger.info(
-                '*Found UTXO with {0:.8f} tBTC, TXID : [{1}]'.format(abs(tx['amount']), tx['txid']))
+                "*Found UTXO with {0:.8f} tBTC, TXID : [{1}]".format(
+                    abs(tx["amount"]), tx["txid"]
+                )
+            )
 
             p2sh_utxo += [tx_in]
-            amount_to_send += abs(float(tx['amount']))
+            amount_to_send += abs(float(tx["amount"]))
 
     if not p2sh_utxo:
-        raise RuntimeError(
-            'No UTXO\'s currently associated with that P2SH address')
+        raise RuntimeError("No UTXO's currently associated with that P2SH address")
 
     # say we want our transaction to have a high priority
     fee_rate = FeeRate.HIGH
@@ -156,30 +214,38 @@ def main():
     # calculate fees using this formula : (n_inputs * 148 + n_outputs * 34 + 10) * price_per_byte
     tx_fee = (len(p2sh_utxo) * 148 + 1 * 34 + 10) * PRICE_PER_BYTE
 
-    logger.info('Total spendable amount aggregated from {0} UTXO(s) associated with P2SH address: {1:.8f} tBTC'.format(
-        len(p2sh_utxo), amount_to_send))
-    logger.info('TX fee in satoshis: {0} (Fee Rate is {1:.8f} tBTC/KB)'.format(
-        to_satoshis(tx_fee), fee_rate.value))
+    logger.info(
+        "Total spendable amount aggregated from {0} UTXO(s) associated with P2SH address: {1:.8f} tBTC".format(
+            len(p2sh_utxo), amount_to_send
+        )
+    )
+    logger.info(
+        "TX fee in satoshis: {0} (Fee Rate is {1:.8f} tBTC/KB)".format(
+            to_satoshis(tx_fee), fee_rate.value
+        )
+    )
 
-    '''
+    """
     Deduct calculated fees from our initial amount.
     Difference between (total_inputs - total_outputs) is the fee since all inputs must be spent completely.
-    '''
+    """
     amount_to_send -= tx_fee
 
-    logger.info('Sending {0} satoshis ({1:.8f} BTC) to P2PKH address [{2}]'.format(
-        to_satoshis(amount_to_send), amount_to_send, p2pkh_addr.to_string()))
+    logger.info(
+        "Sending {0} satoshis ({1:.8f} BTC) to P2PKH address [{2}]".format(
+            to_satoshis(amount_to_send), amount_to_send, p2pkh_addr.to_string()
+        )
+    )
 
     # construct the tx output by specifying the amount to send and locking them to the P2PKH address provided
-    txout = TxOutput(to_satoshis(amount_to_send),
-                     p2pkh_addr.to_script_pub_key())
+    txout = TxOutput(to_satoshis(amount_to_send), p2pkh_addr.to_script_pub_key())
 
     # construct the transaction with N inputs (N >= 1) and 1 output
     tx = Transaction(inputs=p2sh_utxo, outputs=[txout])
 
     unsigned_raw_tx = tx.serialize()
     print("=" * 60)
-    print('\nRaw unsigned transaction: %s\n' % unsigned_raw_tx)
+    print("\nRaw unsigned transaction: %s\n" % unsigned_raw_tx)
     print("=" * 60)
 
     # sign each of the inputs using the 2 private private keys
@@ -189,7 +255,7 @@ def main():
         sig2 = sk2.sign_input(tx, tx_idx, redeem_script)
 
         # add OP_0 in unlocking script due to a bug in multisig scripts
-        txin.script_sig = Script(['OP_0', sig1, sig2, redeem_script.to_hex()])
+        txin.script_sig = Script(["OP_0", sig1, sig2, redeem_script.to_hex()])
 
     final_signed_tx = tx.serialize()
 
@@ -204,22 +270,25 @@ def main():
     # confirm the validity of the transaction by performing a mempool acceptance test
     response_status = proxy.testmempoolaccept([final_signed_tx])[0]
 
-    if response_status['allowed']:
-        logger.info('Transaction is valid, ready to be broadcasted')
+    if response_status["allowed"]:
+        logger.info("Transaction is valid, ready to be broadcasted")
     else:
-        raise InvalidTransactionError('Transaction is not valid therefore it won\'t be broadcasted : {}'.format(
-            response_status["reject-reason"]))
+        raise InvalidTransactionError(
+            "Transaction is not valid therefore it won't be broadcasted : {}".format(
+                response_status["reject-reason"]
+            )
+        )
 
     # broadcast tx once we established its validity
     if not args.dry_run:
         tx_sent = proxy.sendrawtransaction(final_signed_tx)
         if tx_sent:
-            logger.info('Transaction sent to the blockchain')
+            logger.info("Transaction sent to the blockchain")
         else:
-            logger.error('Transaction couldn\'t be broadcasted')
+            logger.error("Transaction couldn't be broadcasted")
     else:
-        logger.warning('--dry-run enabled, transaction not broadcasted')
+        logger.warning('"--dry-run" is enabled, transaction not broadcasted')
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
