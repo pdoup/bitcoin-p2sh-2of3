@@ -1,3 +1,17 @@
+#########################################################
+'''                                  
+Author: Panagiotis Doupidis
+A.M.: 89
+
+        Aristotle University of Thessaloniki
+           Data & Web Science MSc Program
+  
+         Decentralized Technologies Course
+            Assignment 1, 2022 - Bitcoin
+
+spend_all.py : Spend all funds from this P2SH address.
+'''
+#########################################################
 import argparse
 import logging
 
