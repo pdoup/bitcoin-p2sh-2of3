@@ -34,7 +34,7 @@ def main():
     # 20-byte hash value of the redeem script
     p2sh_address = P2shAddress.from_script(redeem_script)
     
-    print("\nP2SH address: %s" % p2sh_address.to_string())
+    print("\nP2SH address: %s" % p2sh_address.to_string(), end='\n' *2)
 
     
 if __name__ == "__main__":
