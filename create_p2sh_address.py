@@ -9,7 +9,7 @@ A.M.: 89
          Decentralized Technologies Course
             Assignment 1, 2022 - Bitcoin
 
-create_p2sh_address.py : create a P2SH Bitcoin address that 
+create_p2sh_address.py : Create a P2SH Bitcoin address that 
 implements a MULTISIG scheme, where all funds sent to it should 
 be locked until 2 out of 3 potential signers sign a transaction 
 to move the funds elsewhere.
