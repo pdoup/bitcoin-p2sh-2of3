@@ -68,7 +68,9 @@ def main():
                         default='INFO', choices=('DEBUG', 'INFO', 'WARN', 'ERROR'),
                         required=False, help='Sets the log level {}'.format({'DEBUG', 'INFO', 'WARN', 'ERROR'}), 
                         dest='log_level')
-    
+    parser.add_argument('--dry-run', action="store_true", required=False, dest="dry_run",
+                        help='Displays the signed raw transaction but doesn\'t actually send it')
+        
     args = parser.parse_args()
 
     logger.setLevel(args.log_level)
@@ -209,11 +211,14 @@ def main():
             response_status["reject-reason"]))
 
     # broadcast tx once we established its validity
-    tx_sent = proxy.sendrawtransaction(final_signed_tx)
-    if tx_sent:
-        logger.info('Transaction sent to the blockchain')
+    if not args.dry_run:
+        tx_sent = proxy.sendrawtransaction(final_signed_tx)
+        if tx_sent:
+            logger.info('Transaction sent to the blockchain')
+        else:
+            logger.error('Transaction couldn\'t be broadcasted')
     else:
-        logger.error('Transaction couldn\'t be broadcasted')
+        logger.warning('--dry-run enabled, transaction not broadcasted')
 
 
 if __name__ == '__main__':
