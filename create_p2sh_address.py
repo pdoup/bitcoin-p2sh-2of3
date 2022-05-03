@@ -28,7 +28,8 @@ def main():
     pk1 = PublicKey.from_hex(args.pk1)
     pk2 = PublicKey.from_hex(args.pk2)
     pk3 = PublicKey.from_hex(args.pk3)
-
+    
+    # build the 2-of-3 MultiSig script
     redeem_script = Script(['OP_2', pk1.to_hex(), pk2.to_hex(), pk3.to_hex(), 'OP_3', 'OP_CHECKMULTISIG'])
 
     # 20-byte hash value of the redeem script
