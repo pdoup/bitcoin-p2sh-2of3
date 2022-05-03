@@ -52,7 +52,8 @@ def main():
                         required=True, help='RPC password as defined in the .conf file')
     parser.add_argument('--log-level', type=str, metavar='log_level', nargs='?',
                         default='INFO', choices=('DEBUG', 'INFO', 'WARN', 'ERROR'),
-                        required=False, help='Sets the log level {}'.format({'DEBUG', 'INFO', 'WARN', 'ERROR'}), dest='log_level')
+                        required=False, help='Sets the log level {}'.format({'DEBUG', 'INFO', 'WARN', 'ERROR'}), 
+                        dest='log_level')
     
     args = parser.parse_args()
 
@@ -85,10 +86,13 @@ def main():
 
     # determine the total amount of blocks in the chain
     n_blocks = proxy.getblockcount()
-
+    
+    # also probe the mempool to check for any tx not in blocks yet
+    n_mempool = proxy.getmempoolinfo()['size']
+    
     # now we can retrieve the total number of transactions in the blockchain
     total_txs = sum([proxy.getblockstats(block, ['txs'])['txs']
-                    for block in range(1, n_blocks)])
+                    for block in range(1, n_blocks)]) + n_mempool
     logger.info(
         'Found a total of {} transactions in the blockchain'.format(total_txs))
 
