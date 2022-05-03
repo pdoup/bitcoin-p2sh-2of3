@@ -18,12 +18,12 @@ class InvalidTransactionError(Exception):
 
 class FeeRate(Enum):
     '''
-    Testnet fee rates (as of 30/4/22) from : https://live.blockcypher.com/btc-testnet/ 
+    Testnet fee rates (as of 03/05/22) from : https://live.blockcypher.com/btc-testnet/ 
     each value is the BTC amount per KB        
     '''
-    HIGH = 0.00171   # high priority (1-2 blocks)
-    MEDIUM = 0.00078  # medium priority (3-6 blocks)
-    LOW = 0.00042    # low priority (7+ blocks)
+    HIGH = 0.00078   # high priority (1-2 blocks)
+    MEDIUM = 0.00052  # medium priority (3-6 blocks)
+    LOW = 0.00029    # low priority (7+ blocks)
 
 
 def main():
