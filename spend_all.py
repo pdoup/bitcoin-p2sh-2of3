@@ -87,10 +87,10 @@ def main():
     # determine the total amount of blocks in the chain
     n_blocks = proxy.getblockcount()
     
-    # also probe the mempool to check for any tx not in blocks yet
+    # also probe the mempool to check for any txs not in blocks yet
     n_mempool = proxy.getmempoolinfo()['size']
     
-    # now we can retrieve the total number of transactions in the blockchain
+    # now we can retrieve the total number of transactions in the blockchain + mempool
     total_txs = sum([proxy.getblockstats(block, ['txs'])['txs']
                     for block in range(1, n_blocks)])
     logger.info(
