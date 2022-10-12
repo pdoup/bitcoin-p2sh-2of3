@@ -30,13 +30,13 @@ provided private keys)
 - [X] accept a `P2PKH` address to send the funds to
 - [X] check if the `P2SH` address has any `UTXO`s to get funds from
 - [X] calculate the appropriate fees with respect to the size of the transaction
-- [Χ] send all funds that the `P2SH` address received to the `P2PKH` address provided
-- [Χ] display the raw unsigned transaction
-- [Χ] sign the transaction
-- [Χ] display the raw signed transaction
-- [Χ] display the transaction id
-- [Χ] verify that the transaction is valid and will be accepted by the Bitcoin nodes
-- [Χ] if the transaction is valid, send it to the blockchain
+- [X] send all funds that the `P2SH` address received to the `P2PKH` address provided
+- [X] display the raw unsigned transaction
+- [X] sign the transaction
+- [X] display the raw signed transaction
+- [X] display the transaction id
+- [X] verify that the transaction is valid and will be accepted by the Bitcoin nodes
+- [X] if the transaction is valid, send it to the blockchain
 
 ### ***Notes***
 1. there is some repetition between the 2 programs; this is fine[^1].
