@@ -15,8 +15,7 @@ Both programs should:
 
 ### The first program should:
 
-- [X] accept 3 public keys for the purpose of creating the `P2SH` address that will
-- [X] implement a `2-of-3 MULTISIG` scheme
+- [X] accept 3 public keys for the purpose of creating the `P2SH` address that will implement a `2-of-3 MULTISIG` scheme
 - [X] display the `P2SH` address
 
 ---
