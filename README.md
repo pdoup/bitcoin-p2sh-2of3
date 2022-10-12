@@ -15,28 +15,28 @@ Both programs should:
 
 ### The first program should:
 
-- [ ] accept 3 public keys for the purpose of creating the `P2SH` address that will
-- [ ] implement a `2-of-3 MULTISIG` scheme
-- [ ] display the `P2SH` address
+- [X] accept 3 public keys for the purpose of creating the `P2SH` address that will
+- [X] implement a `2-of-3 MULTISIG` scheme
+- [X] display the `P2SH` address
 
 ---
 
 ### The second program should:
 
-- [ ] accept 2 private keys (used to sign transactions) and 1 public key (to recreate the
+- [X] accept 2 private keys (used to sign transactions) and 1 public key (to recreate the
 redeem script as above – the other two public keys may be derived from the
 provided private keys)
-- [ ] accept a `P2SH` address to get the funds from (the one created by the first script)
-- [ ] accept a `P2PKH` address to send the funds to
-- [ ] check if the `P2SH` address has any `UTXO`s to get funds from
-- [ ] calculate the appropriate fees with respect to the size of the transaction
-- [ ] send all funds that the `P2SH` address received to the `P2PKH` address provided
-- [ ] display the raw unsigned transaction
-- [ ] sign the transaction
-- [ ] display the raw signed transaction
-- [ ] display the transaction id
-- [ ] verify that the transaction is valid and will be accepted by the Bitcoin nodes
-- [ ] if the transaction is valid, send it to the blockchain
+- [X] accept a `P2SH` address to get the funds from (the one created by the first script)
+- [X] accept a `P2PKH` address to send the funds to
+- [X] check if the `P2SH` address has any `UTXO`s to get funds from
+- [X] calculate the appropriate fees with respect to the size of the transaction
+- [Χ] send all funds that the `P2SH` address received to the `P2PKH` address provided
+- [Χ] display the raw unsigned transaction
+- [Χ] sign the transaction
+- [Χ] display the raw signed transaction
+- [Χ] display the transaction id
+- [Χ] verify that the transaction is valid and will be accepted by the Bitcoin nodes
+- [Χ] if the transaction is valid, send it to the blockchain
 
 ### ***Notes***
 1. there is some repetition between the 2 programs; this is fine[^1].
